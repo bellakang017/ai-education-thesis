@@ -4,162 +4,167 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MKT 397 — AI Audit Proposal</title>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --terra:#d97757;--terra08:rgba(217,119,87,.08);--terra-glow:rgba(217,119,87,.35);
-  --warm:#5c4a3e;--light:#faf9f5;--cream:#f4f3ee;--sand:#ede9e1;
+  /* section accents */
+  --obj:#d97757;--obj08:rgba(217,119,87,.07);
+  --lit:#b0845e;--lit08:rgba(176,132,94,.07);
+  --hyp:#6a9bcc;--hyp08:rgba(106,155,204,.07);
+  --met:#788c5d;--met08:rgba(120,140,93,.07);
+  --out:#9b7db8;--out08:rgba(155,125,184,.07);
+  --ref:#8a8680;
+
+  --light:#faf9f5;--cream:#f4f3ee;--sand:#ede9e1;
   --text:#3d3832;--body:#56504a;--muted:#8a8680;--faint:#b5b0a8;
-  --blue:#6a9bcc;--blue08:rgba(106,155,204,.08);
-  --green:#788c5d;--green08:rgba(120,140,93,.08);
   --bdr:rgba(90,75,60,.07);--bdr2:rgba(90,75,60,.12);
   --serif:'Lora',ui-serif,Georgia,serif;
   --mono:'IBM Plex Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--serif);background:var(--light);color:var(--text);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+body{font-family:var(--serif);background:var(--light);color:var(--text);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}
 
 .app{display:flex;height:100vh;overflow:hidden}
 
 /* ── Sidebar ── */
-.sb{width:280px;min-width:280px;border-right:1px solid var(--bdr);background:var(--cream);display:flex;flex-direction:column}
+.sb{width:260px;min-width:260px;border-right:1px solid var(--bdr);background:var(--cream);display:flex;flex-direction:column}
 .sb-hd{padding:32px 24px 24px;border-bottom:1px solid var(--bdr)}
-.sb-hd .lb{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);margin-bottom:8px;font-weight:500}
-.sb-hd .ti{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--text)}
-.sb-hd .me{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.6}
-.sb-nav{flex:1;overflow-y:auto;padding:16px 0 24px}
-.sb-item{display:flex;align-items:center;gap:10px;width:100%;padding:12px 24px;border:none;background:0 0;cursor:pointer;font-family:var(--serif);font-size:14px;font-weight:400;color:var(--muted);text-align:left;border-left:2px solid transparent;transition:all .15s;text-decoration:none}
-.sb-item:hover{color:var(--text);background:rgba(217,119,87,.04)}
-.sb-item.act{color:var(--terra);font-weight:500;background:var(--terra08);border-left-color:var(--terra)}
-.sb-item .dot{width:5px;height:5px;border-radius:50%;background:var(--terra);box-shadow:0 0 6px var(--terra-glow);display:none;margin-left:auto;flex-shrink:0;animation:pulse 2s ease-in-out infinite}
-.sb-item.act .dot{display:block}
-.sb-item svg{flex-shrink:0;opacity:.4;transition:opacity .15s}
-.sb-item:hover svg{opacity:.6}
-.sb-item.act svg{opacity:.85}
-.sb-ft{padding:16px 24px;border-top:1px solid var(--bdr);font-family:var(--serif);font-size:10px;font-style:italic;color:var(--faint)}
+.sb-hd .lb{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--obj);margin-bottom:8px;font-weight:500}
+.sb-hd .ti{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--text);line-height:1.3}
+.sb-hd .me{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.6}
+.sb-nav{flex:1;overflow-y:auto;padding:20px 0 24px}
+.sb-item{display:flex;align-items:center;gap:12px;width:100%;padding:13px 24px;border:none;background:0 0;cursor:pointer;font-family:var(--serif);font-size:14.5px;font-weight:400;color:var(--muted);text-align:left;border-left:3px solid transparent;transition:all .15s;text-decoration:none}
+.sb-item:hover{color:var(--text);background:rgba(0,0,0,.02)}
+.sb-item.act{font-weight:600}
+.sb-item .pip{width:8px;height:8px;border-radius:50%;flex-shrink:0;opacity:.35;transition:opacity .15s}
+.sb-item.act .pip{opacity:1;box-shadow:0 0 8px currentColor}
+/* per-section colors */
+.sb-item[data-s="obj"]{--ac:var(--obj)}.sb-item[data-s="lit"]{--ac:var(--lit)}.sb-item[data-s="hyp"]{--ac:var(--hyp)}.sb-item[data-s="met"]{--ac:var(--met)}.sb-item[data-s="out"]{--ac:var(--out)}.sb-item[data-s="ref"]{--ac:var(--ref)}
+.sb-item .pip{background:var(--ac);color:var(--ac)}
+.sb-item.act{color:var(--ac);border-left-color:var(--ac);background:color-mix(in srgb,var(--ac) 5%,transparent)}
+.sb-ft{padding:16px 24px;border-top:1px solid var(--bdr);font-family:var(--serif);font-size:10.5px;font-style:italic;color:var(--faint)}
 
 /* ── Content ── */
 .ct{flex:1;overflow-y:auto;scroll-behavior:smooth}
-.ct-inner{max-width:680px;margin:0 auto;padding:52px 56px 100px}
-section{margin-bottom:72px}
+.ct-inner{max-width:660px;margin:0 auto;padding:52px 56px 120px}
+section{margin-bottom:80px}
 section:last-child{margin-bottom:0}
 
-.sl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:12px}
-.sh{font-family:var(--serif);font-size:24px;font-weight:600;line-height:1.35;margin-bottom:20px}
-.ss{font-family:var(--serif);font-size:18px;font-weight:600;line-height:1.4;margin-bottom:14px;margin-top:36px}
-.dv{width:44px;height:1px;background:linear-gradient(90deg,var(--terra),transparent);margin-bottom:24px}
-.pr{font-family:var(--serif);font-size:15px;line-height:1.85;color:var(--body)}
-.pr p{margin-bottom:14px}
+.sl{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.sh{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.35;margin-bottom:6px}
+.sub{font-family:var(--serif);font-size:16px;color:var(--muted);line-height:1.6;margin-bottom:20px;font-style:italic}
+.dv{width:44px;height:2px;margin-bottom:28px}
+.ss{font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.4;margin-bottom:16px;margin-top:40px}
+.pr{font-size:16px;line-height:1.85;color:var(--body)}
+.pr p{margin-bottom:16px}
 .pr strong{color:var(--text);font-weight:600}
 
 .sep{display:block;width:100%;height:1px;background:var(--bdr);margin:0}
 
 /* ── Core Question ── */
-.cq{background:var(--cream);border:1px solid var(--bdr2);border-left:3px solid var(--terra);border-radius:8px;padding:28px 32px;margin:20px 0 28px}
-.cq .ql{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:10px}
-.cq p{font-size:16.5px;line-height:1.7}
-.cq em{color:var(--terra);font-style:normal;font-weight:600}
+.cq{background:var(--cream);border:1px solid var(--bdr2);border-left:3px solid var(--obj);border-radius:8px;padding:28px 32px;margin:24px 0 28px}
+.cq .ql{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--obj);margin-bottom:10px}
+.cq p{font-size:17px;line-height:1.7;font-weight:500}
+.cq em{color:var(--obj);font-style:normal;font-weight:700}
 
 /* ── Stats ── */
-.stats{display:flex;gap:14px;margin:20px 0 28px}
+.stats{display:flex;gap:14px;margin:24px 0 28px}
 .stat{flex:1;text-align:center;padding:22px 12px;border-radius:8px;background:var(--cream);border:1px solid var(--bdr2)}
-.stat .n{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--terra);margin-bottom:3px}
-.stat .l{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-
-.fm{display:inline-block;background:var(--cream);border:1px solid var(--bdr2);font-family:var(--mono);font-size:11.5px;padding:9px 18px;border-radius:6px;margin:8px 0 20px;color:var(--warm)}
-.fm .op{color:var(--terra)}.fm .eq{color:var(--green)}
+.stat .n{font-family:var(--mono);font-size:28px;font-weight:600;color:var(--obj);margin-bottom:3px}
+.stat .l{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 
 /* ── Literature ── */
-.lr{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:start;padding:14px 16px;background:white;border:1px solid var(--bdr);border-radius:7px;margin-bottom:7px;transition:border-color .2s}
-.lr:hover{border-color:var(--terra)}
-.lr a{text-decoration:none;color:inherit}
-.lc{font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--text);line-height:1.4}
-.lc small{font-weight:400;color:var(--faint);display:block;font-size:9px;margin-top:1px}
-.lf{font-family:var(--serif);font-size:13px;line-height:1.55;color:var(--body)}
-.lg{font-family:var(--mono);font-size:9.5px;font-weight:500;color:var(--terra);margin-top:4px}
-.lc .arrow{font-size:9px;color:var(--terra);opacity:0;transition:opacity .15s;margin-left:2px}
+.lr{display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:start;padding:16px 18px;background:white;border:1px solid var(--bdr);border-radius:8px;margin-bottom:8px;transition:border-color .2s;text-decoration:none;color:inherit}
+.lr:hover{border-color:var(--lit)}
+.lc{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--text);line-height:1.4}
+.lc small{font-weight:400;color:var(--faint);display:block;font-size:9.5px;margin-top:2px}
+.lf{font-size:14px;line-height:1.6;color:var(--body)}
+.lg{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--lit);margin-top:5px}
+.arrow{font-size:9px;opacity:0;transition:opacity .15s;margin-left:2px}
 .lr:hover .arrow{opacity:1}
 
 /* ── Gaps ── */
 .gg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
-.gc{border:1px solid var(--bdr2);border-radius:8px;padding:22px 24px;background:white;transition:border-color .2s}
-.gc:hover{border-color:var(--terra)}
-.gc .gn{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--terra);margin-bottom:6px}
-.gc h3{font-size:16px;font-weight:600;margin-bottom:6px}
-.gc p{font-size:13px;line-height:1.6;color:var(--muted)}
+.gc{border:1px solid var(--bdr2);border-radius:8px;padding:22px 24px;background:white}
+.gc .gn{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--lit);margin-bottom:6px}
+.gc h3{font-size:16.5px;font-weight:600;margin-bottom:6px}
+.gc p{font-size:14px;line-height:1.65;color:var(--muted)}
 
 /* ── Hypotheses ── */
-.hy{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:13px 16px;border-radius:7px;background:white;border:1px solid var(--bdr);margin-bottom:7px}
-.hy.c1{border-left:3px solid var(--terra)}.hy.c2{border-left:3px solid var(--blue)}.hy.c3{border-left:3px solid var(--green)}
-.hy .hk{font-family:var(--mono);font-size:11px;font-weight:600}
-.hy .hx{font-size:13.5px;line-height:1.55;color:var(--body)}
-.hy .hx strong{color:var(--text)}
+.hcard{border:1px solid var(--bdr2);border-radius:10px;padding:28px 28px 24px;background:white;margin-bottom:14px;border-left:4px solid var(--hyp)}
+.hcard .hn{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--hyp);margin-bottom:8px}
+.hcard h3{font-size:19px;font-weight:600;margin-bottom:8px;line-height:1.35}
+.hcard .hp{font-size:15px;line-height:1.75;color:var(--body)}
+.hcard .he{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6}
+.hcard .he strong{color:var(--text)}
+.hcard.exp{border-left-color:var(--faint);opacity:.75}
+.hcard.exp .hn{color:var(--faint)}
+
+/* ── Formula ── */
+.fm{display:inline-block;background:var(--cream);border:1px solid var(--bdr2);font-family:var(--mono);font-size:12px;padding:10px 20px;border-radius:6px;margin:8px 0 22px;color:var(--text)}
+.fm .op{color:var(--met);font-weight:600}.fm .eq{color:var(--met);font-weight:700}
 
 /* ── Register Table ── */
 .rt{width:100%;border-collapse:collapse;margin:16px 0}
-.rt th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:7px 12px;border-bottom:2px solid var(--sand)}
-.rt td{padding:9px 12px;border-bottom:1px solid var(--bdr);vertical-align:top;line-height:1.5;font-size:13px;color:var(--body)}
+.rt th{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 12px;border-bottom:2px solid var(--sand)}
+.rt td{padding:10px 12px;border-bottom:1px solid var(--bdr);vertical-align:top;line-height:1.55;font-size:14px;color:var(--body)}
 .rt tr:last-child td{border-bottom:none}
-.r1{font-family:var(--mono)!important;font-weight:600;color:var(--terra)!important;font-size:11px!important}
+.r1{font-family:var(--mono)!important;font-weight:600;color:var(--met)!important;font-size:11px!important}
 .r2{font-weight:600!important;color:var(--text)!important}
-.r3{font-family:var(--mono)!important;font-size:11px!important;color:var(--muted)!important}
 
 /* ── DV Cards ── */
 .dg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
 .dc{padding:18px 20px;border-radius:8px;border:1px solid var(--bdr2);background:white}
-.dc.dp{grid-column:1/-1;background:var(--cream);border-left:3px solid var(--terra)}
-.dl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:3px}
-.dc.dp .dl{color:var(--terra)}
-.dn{font-size:14px;font-weight:600;margin-bottom:3px}
-.dd{font-size:12px;line-height:1.5;color:var(--muted)}
+.dc.dp{grid-column:1/-1;background:var(--met08);border-left:3px solid var(--met)}
+.dl{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--met);margin-bottom:3px}
+.dn{font-size:15px;font-weight:600;margin-bottom:3px}
+.dd{font-size:13px;line-height:1.55;color:var(--muted)}
 
-.ase{background:var(--cream);border:1px solid var(--bdr2);border-left:3px solid var(--green);border-radius:8px;padding:20px 24px;margin-top:16px}
-.ase .al{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+.ase{background:var(--met08);border:1px solid var(--bdr2);border-left:3px solid var(--met);border-radius:8px;padding:20px 24px;margin-top:16px}
+.ase .al{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--met);margin-bottom:6px}
 .ase p{font-family:var(--mono);font-size:14px;color:var(--text)}
-.ase .as{font-size:12px;color:var(--muted);margin-top:4px;font-family:var(--serif)}
+.ase .as{font-size:13px;color:var(--muted);margin-top:4px;font-family:var(--serif)}
 
 /* ── Outcome Cards ── */
 .og{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
 .oc{padding:22px 24px;border-radius:8px;border:1px solid var(--bdr2);background:white}
-.oc .ol{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
-.oc h3{font-size:15px;font-weight:600;margin-bottom:6px}
-.oc p{font-size:13px;line-height:1.6;color:var(--muted)}
+.oc .ol{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.oc h3{font-size:15.5px;font-weight:600;margin-bottom:6px}
+.oc p{font-size:13.5px;line-height:1.65;color:var(--muted)}
 
 /* ── So What ── */
 .wg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
-.wc{padding:24px 22px;border-radius:8px;border:1px solid var(--bdr2);background:white}
-.wc .wn{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--terra);margin-bottom:8px}
+.wc{padding:24px 22px;border-radius:8px;border:1px solid var(--bdr2);background:white;border-top:3px solid var(--out)}
+.wc .wn{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--out);margin-bottom:8px}
 .wc h3{font-size:16px;font-weight:600;margin-bottom:6px}
-.wc p{font-size:13px;line-height:1.6;color:var(--muted)}
+.wc p{font-size:13.5px;line-height:1.65;color:var(--muted)}
 
 /* ── References ── */
-.refs{font-size:12.5px;line-height:1.8;color:var(--muted)}
+.refs{font-size:13.5px;line-height:1.85;color:var(--muted)}
 .refs p{margin-bottom:8px}
-
-@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
 
 /* ── Responsive ── */
 @media(max-width:1024px){
-  .sb{width:240px;min-width:240px}
+  .sb{width:220px;min-width:220px}
   .ct-inner{padding:40px 36px 80px}
 }
 @media(max-width:768px){
   .app{flex-direction:column}
-  .sb{width:100%;min-width:100%;height:auto;max-height:none;border-right:none;border-bottom:1px solid var(--bdr)}
-  .sb-hd{padding:20px 20px 16px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
-  .sb-hd .lb{margin-bottom:0}
+  .sb{width:100%;min-width:100%;height:auto;border-right:none;border-bottom:1px solid var(--bdr)}
+  .sb-hd{padding:20px 20px 12px}
   .sb-nav{display:flex;overflow-x:auto;padding:8px 12px;gap:4px}
-  .sb-item{padding:8px 14px;white-space:nowrap;font-size:13px;border-left:none;border-bottom:2px solid transparent;border-radius:6px}
-  .sb-item.act{border-left:none;border-bottom-color:var(--terra);border-radius:6px}
-  .sb-item svg{display:none}
-  .sb-item .dot{display:none!important}
+  .sb-item{padding:9px 14px;white-space:nowrap;font-size:13px;border-left:none;border-bottom:2px solid transparent;border-radius:6px}
+  .sb-item.act{border-left:none;border-bottom-color:var(--ac)}
+  .sb-item .pip{display:none}
   .sb-ft{display:none}
-  .ct{height:100%;overflow-y:auto}
+  .ct{flex:1;overflow-y:auto}
   .ct-inner{padding:28px 20px 60px}
-  .gg,.stats,.dg,.og,.wg{grid-template-columns:1fr}
-  .lr{grid-template-columns:1fr}
+  .sh{font-size:22px}
+  .gg,.stats,.dg,.og{grid-template-columns:1fr}
   .wg{grid-template-columns:1fr}
+  .lr{grid-template-columns:1fr}
+  .hcard{padding:22px 20px 18px}
 }
 </style>
 </head>
@@ -168,47 +173,30 @@ section:last-child{margin-bottom:0}
 
 <div class="sb">
   <div class="sb-hd">
-    <div class="lb">Research Proposal</div>
-    <div class="ti">AI Audit Study</div>
-    <div class="me">MKT 397 · Prof. Du<br>March 4, 2026</div>
+    <div class="lb">MKT 397</div>
+    <div class="ti">Auditing AI Tutors for Differential Service Quality</div>
+    <div class="me">Prof. Rex Du<br>March 4, 2026</div>
   </div>
   <nav class="sb-nav">
-    <a href="#objective" class="sb-item act" onclick="activate(this)">
-      <svg width="14" height="12" viewBox="0 0 16 14" fill="#d97757"><path d="M1.5 1C.67 1 0 1.67 0 2.5v9C0 12.33.67 13 1.5 13h13c.83 0 1.5-.67 1.5-1.5v-7C16 3.67 15.33 3 14.5 3H8L6.5 1H1.5Z"/></svg>
-      Objective<span class="dot"></span>
-    </a>
-    <a href="#literature" class="sb-item" onclick="activate(this)">
-      <svg width="14" height="12" viewBox="0 0 16 14" fill="#d97757"><path d="M1.5 1C.67 1 0 1.67 0 2.5v9C0 12.33.67 13 1.5 13h13c.83 0 1.5-.67 1.5-1.5v-7C16 3.67 15.33 3 14.5 3H8L6.5 1H1.5Z"/></svg>
-      Literature &amp; Gaps<span class="dot"></span>
-    </a>
-    <a href="#hypotheses" class="sb-item" onclick="activate(this)">
-      <svg width="14" height="12" viewBox="0 0 16 14" fill="#d97757"><path d="M1.5 1C.67 1 0 1.67 0 2.5v9C0 12.33.67 13 1.5 13h13c.83 0 1.5-.67 1.5-1.5v-7C16 3.67 15.33 3 14.5 3H8L6.5 1H1.5Z"/></svg>
-      Hypotheses<span class="dot"></span>
-    </a>
-    <a href="#method" class="sb-item" onclick="activate(this)">
-      <svg width="14" height="12" viewBox="0 0 16 14" fill="#6a9bcc"><path d="M1.5 1C.67 1 0 1.67 0 2.5v9C0 12.33.67 13 1.5 13h13c.83 0 1.5-.67 1.5-1.5v-7C16 3.67 15.33 3 14.5 3H8L6.5 1H1.5Z"/></svg>
-      Method<span class="dot"></span>
-    </a>
-    <a href="#outcomes" class="sb-item" onclick="activate(this)">
-      <svg width="14" height="12" viewBox="0 0 16 14" fill="#788c5d"><path d="M1.5 1C.67 1 0 1.67 0 2.5v9C0 12.33.67 13 1.5 13h13c.83 0 1.5-.67 1.5-1.5v-7C16 3.67 15.33 3 14.5 3H8L6.5 1H1.5Z"/></svg>
-      Outcomes<span class="dot"></span>
-    </a>
-    <a href="#references" class="sb-item" onclick="activate(this)">
-      <svg width="14" height="12" viewBox="0 0 16 14" fill="#b0aea5"><path d="M1.5 1C.67 1 0 1.67 0 2.5v9C0 12.33.67 13 1.5 13h13c.83 0 1.5-.67 1.5-1.5v-7C16 3.67 15.33 3 14.5 3H8L6.5 1H1.5Z"/></svg>
-      References<span class="dot"></span>
-    </a>
+    <a href="#objective" class="sb-item act" data-s="obj"><span class="pip"></span>Objective</a>
+    <a href="#literature" class="sb-item" data-s="lit"><span class="pip"></span>Literature</a>
+    <a href="#hypotheses" class="sb-item" data-s="hyp"><span class="pip"></span>Predictions</a>
+    <a href="#method" class="sb-item" data-s="met"><span class="pip"></span>Method</a>
+    <a href="#outcomes" class="sb-item" data-s="out"><span class="pip"></span>Outcomes</a>
+    <a href="#references" class="sb-item" data-s="ref"><span class="pip"></span>References</a>
   </nav>
   <div class="sb-ft">Bella Kang · Spring 2026</div>
 </div>
 
-<div class="ct">
+<div class="ct" id="scroll-ct">
 <div class="ct-inner">
 
   <!-- ─── OBJECTIVE ─── -->
   <section id="objective">
-    <div class="sl">Research Proposal</div>
-    <div class="sh">Auditing AI Learning Assistants for Differential Service Quality</div>
-    <div class="dv"></div>
+    <div class="sl" style="color:var(--obj)">Research Proposal</div>
+    <div class="sh">Do AI tutors treat students differently based on <em style="color:var(--obj);font-style:normal">how</em> they write?</div>
+    <div class="sub">And does the gap get worse the longer the conversation goes?</div>
+    <div class="dv" style="background:var(--obj)"></div>
     <div class="cq">
       <div class="ql">Core Question</div>
       <p>Do AI learning assistants <em>strengthen, maintain, or reduce</em> service quality differences based on linguistic register as interaction progresses?</p>
@@ -219,47 +207,47 @@ section:last-child{margin-bottom:0}
       <div class="stat"><div class="n">3</div><div class="l">Platforms</div></div>
     </div>
     <div class="pr">
-      <p>AI tutors may deliver different quality based on <strong>how a student writes</strong>, not what they know — and this gap may <strong>compound over multi-turn interactions</strong>.</p>
+      <p>A student who writes in standard English and a student who writes with L1 transfer patterns ask the <strong>same question</strong> and show the <strong>same understanding</strong>. Does the AI tutor scaffold them equally — or does writing style alone change the quality of help?</p>
     </div>
   </section>
 
   <div class="sep"></div>
 
-  <!-- ─── LITERATURE & GAPS ─── -->
+  <!-- ─── LITERATURE ─── -->
   <section id="literature">
-    <div class="sl">Literature</div>
-    <div class="sh">Key studies and remaining gaps</div>
-    <div class="dv"></div>
+    <div class="sl" style="color:var(--lit)">Literature</div>
+    <div class="sh">What we know, and what's missing</div>
+    <div class="dv" style="background:var(--lit)"></div>
 
     <a href="https://doi.org/10.1038/s41586-024-07856-5" target="_blank" rel="noopener" class="lr">
-      <div class="lc">Hofmann et al. (2024)<small>Nature</small></div>
-      <div><div class="lf">Dialect features trigger covert AI racism exceeding recorded human prejudice</div><div class="lg">Gap: general context, not education <span class="arrow">→</span></div></div>
+      <div class="lc">Hofmann et al.<small>Nature, 2024</small></div>
+      <div><div class="lf">Dialect features alone trigger covert AI racism exceeding any recorded human prejudice.</div><div class="lg">Not in education. <span class="arrow">→</span></div></div>
     </a>
     <a href="https://doi.org/10.18653/v1/2024.emnlp-main.750" target="_blank" rel="noopener" class="lr">
-      <div class="lc">Fleisig et al. (2024)<small>EMNLP</small></div>
-      <div><div class="lf">10 dialects produce stereotyping, condescension, comprehension failures</div><div class="lg">Gap: general context, not education <span class="arrow">→</span></div></div>
+      <div class="lc">Fleisig et al.<small>EMNLP, 2024</small></div>
+      <div><div class="lf">ChatGPT produces more stereotyping (+19%), demeaning content (+25%) for non-standard dialects.</div><div class="lg">Not in education. <span class="arrow">→</span></div></div>
     </a>
-    <a href="https://arxiv.org/abs/2501.00000" target="_blank" rel="noopener" class="lr" onclick="event.preventDefault();alert('Preprint — DOI pending')">
-      <div class="lc">Weissburg et al. (2025)<small>NAACL</small></div>
-      <div><div class="lf">9 LLMs generate biased educational content by demographic group</div><div class="lg">Gap: explicit labels, not implicit <span class="arrow">→</span></div></div>
+    <a href="https://scholar.google.com/scholar?q=Weissburg+2025+demographic+bias+LLM+educational+content" target="_blank" rel="noopener" class="lr">
+      <div class="lc">Weissburg et al.<small>NAACL, 2025</small></div>
+      <div><div class="lf">9 LLMs generate biased educational content when told a student's demographic group.</div><div class="lg">Uses explicit labels, not implicit signals. <span class="arrow">→</span></div></div>
     </a>
     <a href="https://scholar.google.com/scholar?q=Vinodh+Kizilcec+2025+AI+tutoring+foundation+model" target="_blank" rel="noopener" class="lr">
-      <div class="lc">Vinodh &amp; Kizilcec (2025)<small>AIED</small></div>
-      <div><div class="lf">Foundation model choice drives tutor response differentiation</div><div class="lg">Gap: explicit identity, single-turn <span class="arrow">→</span></div></div>
+      <div class="lc">Vinodh &amp; Kizilcec<small>AIED, 2025</small></div>
+      <div><div class="lf">Which foundation model you choose changes how the tutor responds to students.</div><div class="lg">Single-turn only. <span class="arrow">→</span></div></div>
     </a>
     <a href="https://scholar.google.com/scholar?q=Lee+2024+systematic+review+AI+education+multi-turn" target="_blank" rel="noopener" class="lr">
-      <div class="lc">Lee et al. (2024)<small>BJET</small></div>
-      <div><div class="lf">Multi-turn evaluation identified as critical gap</div><div class="lg">Gap: theoretical, no empirical test <span class="arrow">→</span></div></div>
+      <div class="lc">Lee et al.<small>BJET, 2024</small></div>
+      <div><div class="lf">Systematic review identifies multi-turn evaluation as critical missing piece.</div><div class="lg">No empirical test. <span class="arrow">→</span></div></div>
     </a>
     <a href="https://doi.org/10.1257/0002828042002561" target="_blank" rel="noopener" class="lr">
-      <div class="lc">Bertrand &amp; Mullainathan (2004)<small>AER</small></div>
-      <div><div class="lf">Correspondence test establishes causal audit methodology</div><div class="lg">Gap: labor market, not AI <span class="arrow">→</span></div></div>
+      <div class="lc">Bertrand &amp; Mullainathan<small>AER, 2004</small></div>
+      <div><div class="lf">Correspondence test method: send identical inputs with one variable changed, measure differential treatment.</div><div class="lg">Labor market, not AI. <span class="arrow">→</span></div></div>
     </a>
 
-    <div class="ss">Research Gaps</div>
+    <div class="ss" style="color:var(--lit)">Two gaps this study fills</div>
     <div class="gg">
-      <div class="gc"><div class="gn">Gap 1</div><h3>Implicit Signals + Education</h3><p>No study tests whether linguistic register alone triggers differential educational quality.</p></div>
-      <div class="gc"><div class="gn">Gap 2</div><h3>Multi-Turn Trajectory</h3><p>Every study is single-turn. Whether bias compounds or self-corrects is unknown.</p></div>
+      <div class="gc"><div class="gn" style="color:var(--lit)">Gap 1</div><h3>Implicit signals in education</h3><p>No study tests whether writing style alone — without naming race or nationality — triggers different tutoring quality.</p></div>
+      <div class="gc"><div class="gn" style="color:var(--lit)">Gap 2</div><h3>Multi-turn trajectory</h3><p>Every study so far is single-turn. We don't know if bias compounds or self-corrects over a conversation.</p></div>
     </div>
   </section>
 
@@ -267,59 +255,75 @@ section:last-child{margin-bottom:0}
 
   <!-- ─── HYPOTHESES ─── -->
   <section id="hypotheses">
-    <div class="sl">Hypotheses</div>
-    <div class="sh">Seven predictions</div>
-    <div class="dv"></div>
-    <div class="hy c1"><div class="hk">H1</div><div class="hx"><strong>Existence.</strong> Different service quality across registers, identical performance.</div></div>
-    <div class="hy c2"><div class="hk">H2a</div><div class="hx"><strong>L1 Transfer trajectory.</strong> Flatter scaffolding slopes than SAE.</div></div>
-    <div class="hy c2"><div class="hk">H2b</div><div class="hx"><strong>SAE trajectory.</strong> Steeper slopes — AI progressively challenges.</div></div>
-    <div class="hy c2"><div class="hk">H2c</div><div class="hx"><strong>Path dependence.</strong> Gap larger at Round 5 than Round 1.</div></div>
-    <div class="hy c1"><div class="hk">H3</div><div class="hx"><strong>Recovery failure.</strong> Self-correction at Round 3 does not shift L1 transfer trajectories.</div></div>
-    <div class="hy c3"><div class="hk">H4</div><div class="hx"><strong>Platform variation.</strong> Patterns differ across ChatGPT, Claude, Gemini.</div></div>
-    <div class="hy c3"><div class="hk">H5</div><div class="hx"><strong>Strategy shift.</strong> More directive, less Socratic for L1 transfer; widens over rounds.</div></div>
-    <div class="hy c3"><div class="hk">H6</div><div class="hx"><strong>Gender.</strong> Scaffolding differs by name gender within same register.</div></div>
-    <div class="hy c3"><div class="hk">H7</div><div class="hx"><strong>Interaction.</strong> Gender bias larger for L1 transfer than SAE.</div></div>
+    <div class="sl" style="color:var(--hyp)">Predictions</div>
+    <div class="sh">Three things I expect to find</div>
+    <div class="dv" style="background:var(--hyp)"></div>
+
+    <div class="hcard">
+      <div class="hn">Prediction 1 — The gap exists</div>
+      <h3>Same question, same knowledge, different help</h3>
+      <div class="hp">Two students ask the exact same statistics question and demonstrate equal understanding. The only difference is writing style. The AI tutor gives the standard-English writer more challenging follow-ups, deeper explanations, and more Socratic questioning.</div>
+      <div class="he"><strong>Test:</strong> H1 — Scaffolding quality differs across registers at identical performance levels.</div>
+    </div>
+
+    <div class="hcard">
+      <div class="hn">Prediction 2 — It gets worse over time</div>
+      <h3>Five rounds of conversation amplify the gap</h3>
+      <div class="hp">By the 5th exchange, the standard-English writer is being pushed toward higher-order thinking. The L1-transfer writer is still getting basic confirmations. The gap at Round 5 is larger than at Round 1.</div>
+      <div class="he"><strong>Test:</strong> H2 — Scaffolding trajectory slope is flatter for non-standard registers. H2c — Gap at Round 5 &gt; Round 1.</div>
+    </div>
+
+    <div class="hcard">
+      <div class="hn">Prediction 3 — Showing competence doesn't fix it</div>
+      <h3>First impressions override demonstrated ability</h3>
+      <div class="hp">At Round 3, the student gives a clearly correct, high-quality answer. If the student writes in standard English, the AI escalates. If the student writes with L1 transfer, the AI stays flat — treating the first impression as permanent.</div>
+      <div class="he"><strong>Test:</strong> H3 — Self-correction at Round 3 does not shift the trajectory for non-standard registers.</div>
+    </div>
+
+    <div class="hcard exp">
+      <div class="hn">Exploratory</div>
+      <h3>Platform, strategy, and gender variation</h3>
+      <div class="hp">H4–H7: Do ChatGPT, Claude, and Gemini differ? Does the AI shift from Socratic to directive? Does name-based gender interact with register?</div>
+    </div>
   </section>
 
   <div class="sep"></div>
 
   <!-- ─── METHOD ─── -->
   <section id="method">
-    <div class="sl">Method</div>
+    <div class="sl" style="color:var(--met)">Method</div>
     <div class="sh">Fully crossed correspondence test</div>
-    <div class="dv"></div>
+    <div class="dv" style="background:var(--met)"></div>
     <div class="fm">5 registers <span class="op">×</span> 2 gender <span class="op">×</span> 2 performance <span class="op">×</span> 3 platforms <span class="op">×</span> 5 rounds <span class="op">×</span> 20 reps <span class="eq">= 6,000</span></div>
     <div class="pr">
-      <p><strong>Platforms:</strong> ChatGPT (GPT-4o), Claude (Sonnet), Gemini (1.5 Pro). Default temperature, no system prompts.</p>
+      <p><strong>Platforms:</strong> ChatGPT (GPT-4o), Claude (Sonnet), Gemini (1.5 Pro). Default settings, no system prompts.</p>
       <p><strong>Tasks:</strong> Intro statistics, economics, academic writing. Two performance levels (80% vs. 40%).</p>
-      <p><strong>Power:</strong> 20 reps/cell → &gt;0.80 at α = 0.05 for primary contrast.</p>
     </div>
 
-    <div class="ss">Linguistic Registers</div>
+    <div class="ss" style="color:var(--met)">Five linguistic registers</div>
     <table class="rt">
-      <thead><tr><th></th><th>Register</th><th>UT %</th><th>Rationale</th></tr></thead>
+      <thead><tr><th></th><th>Register</th><th>Example pattern</th></tr></thead>
       <tbody>
-        <tr><td class="r1">A</td><td class="r2">Standard American English</td><td class="r3">~33%</td><td>Baseline.</td></tr>
-        <tr><td class="r1">B</td><td class="r2">Spanish-English Bilingual</td><td class="r3">~25.5%</td><td>Code-switching. HSI-relevant.</td></tr>
-        <tr><td class="r1">C</td><td class="r2">East Asian L1 Transfer</td><td class="r3">~22.4%</td><td>Article omission, topic-prominent.</td></tr>
-        <tr><td class="r1">D</td><td class="r2">South Asian English</td><td class="r3">subset</td><td>"Different" vs. "deficient."</td></tr>
-        <tr><td class="r1">E</td><td class="r2">Formal L2 English</td><td class="r3">subset</td><td>Overly formal, textbook-like.</td></tr>
+        <tr><td class="r1">A</td><td class="r2">Standard American English</td><td>Baseline — no marked features.</td></tr>
+        <tr><td class="r1">B</td><td class="r2">Spanish-English Bilingual</td><td>Code-switching. "I have doubt about this formula."</td></tr>
+        <tr><td class="r1">C</td><td class="r2">East Asian L1 Transfer</td><td>Article omission. "I study about hypothesis testing."</td></tr>
+        <tr><td class="r1">D</td><td class="r2">South Asian English</td><td>"Kindly explain the concept once more."</td></tr>
+        <tr><td class="r1">E</td><td class="r2">Formal L2 English</td><td>Overly textbook. "I wish to inquire regarding…"</td></tr>
       </tbody>
     </table>
 
-    <div class="ss">Dependent Variables</div>
+    <div class="ss" style="color:var(--met)">What we measure</div>
     <div class="dg">
-      <div class="dc dp"><div class="dl">Primary</div><div class="dn">Scaffolding Trajectory</div><div class="dd">Bloom's level (1–6) per response. Slope across rounds = key metric.</div></div>
+      <div class="dc dp"><div class="dl">Primary DV</div><div class="dn">Scaffolding Trajectory</div><div class="dd">Bloom's level (1–6) per response. Slope across 5 rounds is the key metric.</div></div>
       <div class="dc"><div class="dl">Secondary</div><div class="dn">Response Depth</div><div class="dd">Flesch-Kincaid grade, word count.</div></div>
-      <div class="dc"><div class="dl">Secondary</div><div class="dn">Strategy</div><div class="dd">Socratic vs. directive ratio.</div></div>
-      <div class="dc"><div class="dl">Secondary</div><div class="dn">Ceiling</div><div class="dd">Max Bloom's, extension offers.</div></div>
-      <div class="dc"><div class="dl">Secondary</div><div class="dn">Assumed Capability</div><div class="dd">Implicit expectation language.</div></div>
+      <div class="dc"><div class="dl">Secondary</div><div class="dn">Strategy Type</div><div class="dd">Socratic questioning vs. directive telling.</div></div>
+      <div class="dc"><div class="dl">Secondary</div><div class="dn">Assumed Capability</div><div class="dd">Implicit expectation in language.</div></div>
     </div>
-    <div class="ase"><div class="al">Summary Metric</div><p>ASE Index = 1 − (max − min) / max</p><div class="as">Algorithmic Service Equity across conditions.</div></div>
+    <div class="ase"><div class="al">Summary Metric</div><p>ASE Index = 1 − (max − min) / max</p><div class="as">Algorithmic Service Equity: 1.0 = identical treatment, 0.0 = maximum disparity.</div></div>
 
-    <div class="ss">Analysis</div>
+    <div class="ss" style="color:var(--met)">Analysis</div>
     <div class="pr">
-      <p><strong>Mixed-effects ANOVA + growth curve modeling.</strong> Piecewise model tests recovery at Round 3. 10% manual coding (Cohen's κ); remainder LLM-assisted with untested model.</p>
+      <p><strong>Mixed-effects ANOVA + growth curve modeling.</strong> Piecewise model tests whether the Round 3 competence signal actually shifts trajectory. 10% human-coded (Cohen's κ), remainder LLM-assisted.</p>
     </div>
   </section>
 
@@ -327,21 +331,21 @@ section:last-child{margin-bottom:0}
 
   <!-- ─── OUTCOMES ─── -->
   <section id="outcomes">
-    <div class="sl">Implications</div>
-    <div class="sh">Anticipated outcomes</div>
-    <div class="dv"></div>
+    <div class="sl" style="color:var(--out)">Outcomes</div>
+    <div class="sh">What we learn either way</div>
+    <div class="dv" style="background:var(--out)"></div>
     <div class="og">
-      <div class="oc"><div class="ol" style="color:var(--terra)">If H1–H2 Supported</div><h3>First empirical evidence</h3><p>Implicit register triggers differential quality. Multi-turn amplifies.</p></div>
-      <div class="oc"><div class="ol" style="color:var(--terra)">If H3 Supported</div><h3>First impression fixation</h3><p>Competence cannot override linguistic profiling.</p></div>
-      <div class="oc"><div class="ol" style="color:var(--green)">If H1 Rejected</div><h3>Boundary condition</h3><p>Education is where dialect bias doesn't replicate.</p></div>
-      <div class="oc"><div class="ol" style="color:var(--green)">If Mixed Platforms</div><h3>Product differentiation</h3><p>Some platforms self-correct. Regulatory implications.</p></div>
+      <div class="oc"><div class="ol" style="color:var(--out)">If confirmed</div><h3>First empirical evidence</h3><p>Writing style alone triggers differential tutoring. Multi-turn amplifies the gap.</p></div>
+      <div class="oc"><div class="ol" style="color:var(--out)">If not confirmed</div><h3>Boundary condition</h3><p>Education is where dialect bias doesn't replicate — a meaningful finding.</p></div>
+      <div class="oc"><div class="ol" style="color:var(--out)">If recovery fails</div><h3>First impression lock-in</h3><p>Competence can't override linguistic profiling once formed.</p></div>
+      <div class="oc"><div class="ol" style="color:var(--out)">If platforms differ</div><h3>Product differentiation</h3><p>Some self-correct, some don't. Direct regulatory relevance.</p></div>
     </div>
 
-    <div class="ss">Why this matters</div>
+    <div class="ss" style="color:var(--out)">Why this matters</div>
     <div class="wg">
       <div class="wc"><div class="wn">01</div><h3>Market Failure</h3><p>Service quality driven by communication style, not need.</p></div>
-      <div class="wc"><div class="wn">02</div><h3>Regulatory Signal</h3><p>EU AI Act classifies education as high-risk. Evidence needed.</p></div>
-      <div class="wc"><div class="wn">03</div><h3>Actionable Metric</h3><p>ASE Index for platform self-audit. Universities: beyond allow/ban.</p></div>
+      <div class="wc"><div class="wn">02</div><h3>Regulatory Evidence</h3><p>EU AI Act classifies education as high-risk. Empirical data needed.</p></div>
+      <div class="wc"><div class="wn">03</div><h3>Actionable Metric</h3><p>ASE Index for platform self-audit. For universities: beyond allow/ban.</p></div>
     </div>
   </section>
 
@@ -349,8 +353,8 @@ section:last-child{margin-bottom:0}
 
   <!-- ─── REFERENCES ─── -->
   <section id="references">
-    <div class="sl">References</div>
-    <div class="dv"></div>
+    <div class="sl" style="color:var(--ref)">References</div>
+    <div class="dv" style="background:var(--ref)"></div>
     <div class="refs">
       <p>Bertrand, M., &amp; Mullainathan, S. (2004). Are Emily and Greg more employable than Lakisha and Jamal? <em>American Economic Review, 94</em>(4), 991–1013.</p>
       <p>Fleisig, E., et al. (2024). Linguistic bias in ChatGPT: Language models reinforce dialect discrimination. <em>EMNLP 2024</em>, 13541–13564.</p>
@@ -367,16 +371,12 @@ section:last-child{margin-bottom:0}
 </div>
 
 <script>
-function activate(el){
-  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('act'));
-  el.classList.add('act');
-}
-const ct=document.querySelector('.ct');
+const ct=document.getElementById('scroll-ct');
 const secs=document.querySelectorAll('section[id]');
 const lnks=document.querySelectorAll('.sb-item');
 ct.addEventListener('scroll',()=>{
   let cur='';
-  secs.forEach(s=>{if(s.offsetTop-ct.scrollTop<140)cur=s.id});
+  secs.forEach(s=>{if(s.offsetTop-ct.scrollTop<160)cur=s.id});
   lnks.forEach(l=>{l.classList.remove('act');if(l.getAttribute('href')==='#'+cur)l.classList.add('act')});
 });
 </script>
